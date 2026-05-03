@@ -95,6 +95,13 @@
             font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
+        /* THÊM TRANSITION CHO CÁC THÀNH PHẦN BÊN DƯỚI ĐỂ LÀM MƯỢT HIỆU ỨNG BLUR */
+        .home-screen, .search-button-container, .dock {
+            transition: filter calc(var(--anim-speed) * 0.8) cubic-bezier(0.32, 0.72, 0, 1),
+                        transform calc(var(--anim-speed) * 0.8) cubic-bezier(0.32, 0.72, 0, 1);
+            will-change: filter, transform;
+        }
+
         /* HOME SCREEN */
         .home-screen {
             flex: 1;
@@ -122,7 +129,7 @@
         .widget {
             width: 100%;
             aspect-ratio: 1 / 1; 
-            border-radius: 3.5vh;
+            border-radius: 3vh;
             padding: 1.8vh;
             display: flex;
             flex-direction: column;
@@ -197,7 +204,7 @@
             display: flex;
             align-items: center;
             gap: 0.5vh;
-            padding: 0.6vh 1.4vh;
+            padding: 1vh 2vh;
             background-color: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(7px);
             -webkit-backdrop-filter: blur(7px);
@@ -210,7 +217,7 @@
 
         .search-button:active { transform: scale(0.95); }
         .search-button span { font-size: 1.4vh; font-weight: 500; }
-        .search-button .material-symbols-rounded { font-size: 1.6vh !important; }
+        .search-button .material-symbols-rounded { font-size: 2vh !important; }
 
         /* DOCK */
         .dock {
@@ -218,8 +225,8 @@
             grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 2vh; 
             padding: 1.5vh;
-            margin: 0 1vh 1.2vh 1vh; 
-            border-radius: 3.8vh;
+            margin: 0 1.5vh 0vh 1.5vh;
+            border-radius: 3vh;
             background-color: #ffffff26;
             backdrop-filter: blur(7px);
             -webkit-backdrop-filter: blur(7px);
@@ -230,11 +237,11 @@
 
         /* NAVIGATION GESTURE PILL */
         .nav-bar {
-            height: 3.5vh;
+            height: 3vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding-bottom: env(safe-area-inset-bottom, 1.2vh); /* Tương thích iPhone không nút home */
+            padding-bottom: env(safe-area-inset-bottom, 1.2vh); 
             position: relative;
             z-index: 90;
             cursor: pointer;
@@ -267,6 +274,25 @@
 
         .app-display.active { pointer-events: auto; }
 
+        /* HIỆU ỨNG ICON THU/PHÓNG */
+        .transition-icon {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: inherit;
+            z-index: 100;
+            opacity: 1;
+            transition: opacity calc(var(--anim-speed) * 0.6) ease;
+            pointer-events: none;
+        }
+
+        .app-display.active .transition-icon {
+            opacity: 0;
+        }
+
         .app-display-text {
             color: black;
             font-size: 3.5vh;
@@ -280,10 +306,18 @@
 
         .app-display.active .app-display-text { opacity: 1; transform: translateY(0); }
 
-        /* Dark mode status/nav on white background */
+        /* CÁC HIỆU ỨNG KHI MỞ APP (DARK MODE STATUS BAR, BLA BLA) */
         .phone-frame.app-opened .status-bar { color: black; text-shadow: none; transition: color 0.3s; }
         .phone-frame.app-opened .status-icons { text-shadow: none; }
         .phone-frame.app-opened .gesture-pill { background-color: black; transition: background-color 0.3s; }
+
+        /* MỚI: HIỆU ỨNG BLUR KHUNG NỀN (HOME SCREEN, DOCK) KHI MỞ APP */
+        .phone-frame.app-opened .home-screen,
+        .phone-frame.app-opened .search-button-container,
+        .phone-frame.app-opened .dock {
+            filter: blur(7px);
+            transform: scale(0.97); /* Hơi thu nhỏ nền lại xíu để tạo chiều sâu 3D giống iOS */
+        }
 
         /* =========================================
            GIAO DIỆN ỨNG DỤNG CÀI ĐẶT (SETTINGS)
@@ -404,6 +438,9 @@
         <div class="dock" id="dock"></div>
 
         <div class="app-display" id="appDisplay">
+            <!-- Ảnh icon dùng để làm hiệu ứng thu/phóng -->
+            <img id="transitionIcon" class="transition-icon" src="" alt="">
+
             <div class="app-display-text" id="defaultAppText">Coming soon</div>
 
             <!-- MÀN HÌNH GIAO DIỆN CÀI ĐẶT -->
@@ -522,6 +559,7 @@
         const phoneFrame = document.getElementById('phoneFrame');
         const navBar = document.getElementById('navBar');
         
+        const transitionIcon = document.getElementById('transitionIcon');
         const defaultAppText = document.getElementById('defaultAppText');
         const settingsUI = document.getElementById('settingsUI');
 
@@ -531,6 +569,14 @@
             if (!activeElementSource) return;
 
             const appName = element.getAttribute('data-name') || "App";
+
+            // GÁN HÌNH ẢNH ICON VÀO KHUNG CHUYỂN CẢNH
+            if (!isWidget) {
+                transitionIcon.src = activeElementSource.src;
+                transitionIcon.style.display = 'block';
+            } else {
+                transitionIcon.style.display = 'none'; 
+            }
 
             if (appName === "Cài đặt") {
                 settingsUI.style.display = "flex";
@@ -546,8 +592,7 @@
             const rect = activeElementSource.getBoundingClientRect();
             const frameRect = phoneFrame.getBoundingClientRect();
             
-            // FIX: Trừ đi độ dày của viền phoneFrame (clientTop, clientLeft) 
-            // do phần tử position absolute bên trong tính theo mép padding bên trong viền
+            // Trừ đi độ dày của viền phoneFrame (clientTop, clientLeft)
             const top = rect.top - frameRect.top - phoneFrame.clientTop;
             const left = rect.left - frameRect.left - phoneFrame.clientLeft;
 
@@ -581,7 +626,6 @@
             const rect = activeElementSource.getBoundingClientRect();
             const frameRect = phoneFrame.getBoundingClientRect();
             
-            // FIX: Trừ đi độ dày của viền phoneFrame (clientTop, clientLeft)
             const top = rect.top - frameRect.top - phoneFrame.clientTop;
             const left = rect.left - frameRect.left - phoneFrame.clientLeft;
             
