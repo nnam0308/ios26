@@ -65,39 +65,20 @@
             z-index: 100;
         }
 
-        /* KHUNG ĐIỆN THOẠI (Khi mở trên Mobile thật - Full màn hình) */
-        .phone-frame.is-mobile {
-            width: 100vw;
-            height: 100dvh; /* Tràn hết màn hình */
-            aspect-ratio: auto;
-            border-radius: 0;
-            border: 0;
-            box-shadow: none;
-        }
-        
-        .phone-frame.is-mobile .camera-hole {
-            display: none; /* Ẩn camera giả trên điện thoại thật */
-        }
-        
-        /* Chỉnh lại padding khi ở chế độ Full màn hình (tránh vướng tai thỏ đt thật) */
-        .phone-frame.is-mobile .status-bar {
-            padding-top: env(safe-area-inset-top, 2vh);
-        }
-
         /* STATUS BAR */
         .status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2vh 2.5vh 1vh 2.5vh; 
+            padding: 2vh 3vh 1vh 3vh; 
             color: white;
             position: relative;
             z-index: 90;
         }
 
         .status-bar .time {
-            font-size: 1.75vh;
-            font-weight: 550;
+            font-size: 2vh;
+            font-weight: bold;
             letter-spacing: -0.2px;
             text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
@@ -105,12 +86,12 @@
         .status-icons {
             display: flex;
             align-items: center;
-            gap: 0.6vh;
+            gap: 1vh;
             text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
 
         .material-symbols-rounded {
-            font-size: 2vh !important;
+            font-size: 2.25vh !important;
             font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
@@ -475,18 +456,6 @@
     </div>
 
     <script>
-        // --- 1. NHẬN DIỆN MOBILE VIA USER-AGENT ---
-        let isMobileDevice = false;
-        function checkMobile() {
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            // Regex cơ bản nhận diện các thiết bị di động
-            if (/android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase())) {
-                isMobileDevice = true;
-                document.getElementById('phoneFrame').classList.add('is-mobile');
-            }
-        }
-        checkMobile(); // Chạy ngay khi load
-
         // --- CÁC HÀM CƠ BẢN ---
         function updateClock() {
             const now = new Date();
@@ -576,8 +545,11 @@
 
             const rect = activeElementSource.getBoundingClientRect();
             const frameRect = phoneFrame.getBoundingClientRect();
-            const top = rect.top - frameRect.top;
-            const left = rect.left - frameRect.left;
+            
+            // FIX: Trừ đi độ dày của viền phoneFrame (clientTop, clientLeft) 
+            // do phần tử position absolute bên trong tính theo mép padding bên trong viền
+            const top = rect.top - frameRect.top - phoneFrame.clientTop;
+            const left = rect.left - frameRect.left - phoneFrame.clientLeft;
 
             appDisplay.style.transition = 'none';
             appDisplay.style.borderRadius = isWidget ? '3.5vh' : `${rect.width * 0.25}px`;
@@ -596,8 +568,8 @@
             appDisplay.style.width = '100%';
             appDisplay.style.height = '100%';
             
-            // XỬ LÝ VIỀN GÓC: Nếu mở trên Mobile thật thì không bo viền App (0px)
-            appDisplay.style.borderRadius = isMobileDevice ? '0px' : '3.5vh'; 
+            // XỬ LÝ VIỀN GÓC: Không bo viền App
+            appDisplay.style.borderRadius = '3.5vh'; 
 
             appDisplay.classList.add('active');
             phoneFrame.classList.add('app-opened');
@@ -608,8 +580,10 @@
             if (!isAppOpen || !activeElementSource) return;
             const rect = activeElementSource.getBoundingClientRect();
             const frameRect = phoneFrame.getBoundingClientRect();
-            const top = rect.top - frameRect.top;
-            const left = rect.left - frameRect.left;
+            
+            // FIX: Trừ đi độ dày của viền phoneFrame (clientTop, clientLeft)
+            const top = rect.top - frameRect.top - phoneFrame.clientTop;
+            const left = rect.left - frameRect.left - phoneFrame.clientLeft;
             
             appDisplay.classList.remove('active');
             phoneFrame.classList.remove('app-opened');
