@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hybrid OS UI - Fullscreen Mobile</title>
+    <title>iOS 26 Demo</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://static.wikia.nocookie.net/logopedia/images/8/84/IOS26.png" type="image/png">
     
     <!-- Google Sans Flex Font -->
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet">
@@ -43,7 +46,7 @@
             background-image: url('https://www.iclarified.com/images/news/97554/465552/465552-500.avif');
             background-size: cover;
             background-position: center;
-            border-radius: 4.5vh;
+            border-radius: 6vh;
             border: 0.8vh solid #1a1a1a;
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             position: relative;
@@ -53,27 +56,87 @@
             transition: all 0.3s ease;
         }
 
-        .camera-hole {
+        /* DYNAMIC ISLAND (thay thế camera-hole) */
+        .dynamic-island {
             position: absolute;
-            top: 1.5vh;
+            top: 2vh;
             left: 50%;
             transform: translateX(-50%);
-            width: 1.8vh;
-            height: 1.8vh;
+            width: 10vh;
+            height: 3.5vh;
             background-color: #000;
-            border-radius: 50%;
+            border-radius: 2vh; /* Tạo hình pill bo tròn */
             z-index: 100;
+            transition: width var(--anim-speed) cubic-bezier(0.32, 0.72, 0, 1),
+                        border-radius var(--anim-speed) cubic-bezier(0.32, 0.72, 0, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
-        /* STATUS BAR */
+        /* Nội dung hiển thị khi đang sạc */
+        .charge-content {
+            display: none;
+            width: 100%;
+            height: 100%;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5vh;
+            color: white;
+            font-size: 1.4vh;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .charge-text {
+            flex-shrink: 0;
+        }
+
+        .charge-info {
+            display: flex;
+            align-items: center;
+            gap: 0.3vh;
+            flex-shrink: 0;
+        }
+
+        .charge-icon {
+            width: 3.5vh;
+            height: 3.5vh;
+            object-fit: contain;
+        }
+
+        .battery-percent {
+            font-size: 1.4vh;
+            font-weight: 500;
+        }
+
+        /* Khi đang sạc – mở rộng Dynamic Island */
+        .dynamic-island.charging {
+            width: 35vh;
+            border-radius: 2vh;
+        }
+
+        .dynamic-island.charging .charge-content {
+            display: flex;
+        }
+
+        /* Ẩn status bar khi dynamic island mở rộng */
         .status-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2vh 3vh 1vh 3vh; 
+            padding: 2.5vh 4vh 0.5vh 4vh; 
             color: white;
             position: relative;
             z-index: 90;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .status-bar.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .status-bar .time {
@@ -86,16 +149,16 @@
         .status-icons {
             display: flex;
             align-items: center;
-            gap: 1vh;
+            gap: 0.75vh;
             text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
 
         .material-symbols-rounded {
-            font-size: 2.25vh !important;
+            font-size: 2.5vh !important;
             font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
-        /* THÊM TRANSITION CHO CÁC THÀNH PHẦN BÊN DƯỚI ĐỂ LÀM MƯỢT HIỆU ỨNG BLUR */
+        /* TRANSITION CHO CÁC THÀNH PHẦN ĐỂ LÀM MƯỢT HIỆU ỨNG BLUR */
         .home-screen, .search-button-container, .dock {
             transition: filter calc(var(--anim-speed) * 0.8) cubic-bezier(0.32, 0.72, 0, 1),
                         transform calc(var(--anim-speed) * 0.8) cubic-bezier(0.32, 0.72, 0, 1);
@@ -306,17 +369,17 @@
 
         .app-display.active .app-display-text { opacity: 1; transform: translateY(0); }
 
-        /* CÁC HIỆU ỨNG KHI MỞ APP (DARK MODE STATUS BAR, BLA BLA) */
+        /* CÁC HIỆU ỨNG KHI MỞ APP */
         .phone-frame.app-opened .status-bar { color: black; text-shadow: none; transition: color 0.3s; }
         .phone-frame.app-opened .status-icons { text-shadow: none; }
         .phone-frame.app-opened .gesture-pill { background-color: black; transition: background-color 0.3s; }
 
-        /* MỚI: HIỆU ỨNG BLUR KHUNG NỀN (HOME SCREEN, DOCK) KHI MỞ APP */
+        /* HIỆU ỨNG BLUR KHUNG NỀN (HOME SCREEN, DOCK) KHI MỞ APP */
         .phone-frame.app-opened .home-screen,
         .phone-frame.app-opened .search-button-container,
         .phone-frame.app-opened .dock {
             filter: blur(7px);
-            transform: scale(0.97); /* Hơi thu nhỏ nền lại xíu để tạo chiều sâu 3D giống iOS */
+            transform: scale(0.97); 
         }
 
         /* =========================================
@@ -342,55 +405,65 @@
             color: black; letter-spacing: -0.5px;
         }
 
-        .settings-group {
-            background-color: white; border-radius: 1.5vh; margin: 0 2.5vh 2.5vh 2.5vh; overflow: hidden;
-        }
-
-        .settings-item {
-            display: flex; align-items: center; padding: 1.5vh; border-bottom: 1px solid #e5e5ea;
-        }
+        .settings-group { background-color: white; border-radius: 1.5vh; margin: 0 2.5vh 2.5vh 2.5vh; overflow: hidden; }
+        .settings-item { display: flex; align-items: center; padding: 1.5vh; border-bottom: 1px solid #e5e5ea; }
         .settings-item:last-child { border-bottom: none; }
 
-        /* Mục Profile */
-        .profile-avatar {
-            width: 6vh; height: 6vh; background-color: #d1d1d6; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; margin-right: 1.5vh; color: white;
-        }
+        .profile-avatar { width: 6vh; height: 6vh; background-color: #d1d1d6; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 1.5vh; color: white; }
         .profile-avatar .material-symbols-rounded { font-size: 3.5vh !important; }
         .profile-info { display: flex; flex-direction: column; }
         .profile-title { font-size: 2vh; color: #007aff; font-weight: 500; margin-bottom: 0.2vh; }
         .profile-subtitle { font-size: 1.4vh; color: #8e8e93; font-weight: 400; }
 
-        /* Mục Animation */
-        .settings-icon {
-            width: 3.5vh; height: 3.5vh; border-radius: 0.8vh; display: flex; justify-content: center; align-items: center;
-            color: white; margin-right: 1.5vh;
-        }
+        .settings-icon { width: 3.5vh; height: 3.5vh; border-radius: 0.8vh; display: flex; justify-content: center; align-items: center; color: white; margin-right: 1.5vh; }
         .settings-icon.anim-icon { background-color: #5856d6; }
         .settings-icon .material-symbols-rounded { font-size: 2.2vh !important; }
         .settings-content { flex: 1; display: flex; justify-content: space-between; align-items: center; font-size: 1.8vh; font-weight: 500; color: black; }
-        .settings-select {
-            appearance: none; background: transparent; border: none; color: #8e8e93; font-size: 1.6vh;
-            font-weight: 450; text-align: right; outline: none; cursor: pointer; direction: rtl;
-        }
+        .settings-select { appearance: none; background: transparent; border: none; color: #8e8e93; font-size: 1.6vh; font-weight: 450; text-align: right; outline: none; cursor: pointer; direction: rtl; }
         
-        /* Thanh Search Cài đặt */
-        .settings-search-container {
-            position: absolute; bottom: calc(env(safe-area-inset-bottom, 1.2vh) + 3.5vh);
-            left: 0; width: 100%; padding: 0 2.5vh; display: flex; justify-content: center;
-        }
+        .settings-search-container { position: absolute; bottom: calc(env(safe-area-inset-bottom, 1.2vh) + 3.5vh); left: 0; width: 100%; padding: 0 2.5vh; display: flex; justify-content: center; }
         .settings-search-bar { background-color: #e4e4e9; border-radius: 1.5vh; display: flex; align-items: center; width: 100%; padding: 1vh 1.5vh; gap: 1vh; color: #8e8e93; }
         .settings-search-bar input { border: none; background: transparent; font-size: 1.7vh; width: 100%; outline: none; color: black; font-weight: 500; }
         .settings-search-bar input::placeholder { color: #8e8e93; font-weight: 400; }
+
+        /* =========================================
+           GIAO DIỆN ỨNG DỤNG THỜI TIẾT (IFRAME)
+           ========================================= */
+        .weather-ui {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: none; 
+            opacity: 0;
+            transition: opacity calc(var(--anim-speed) * 0.8) ease;
+            transition-delay: calc(var(--anim-speed) * 0.2);
+            border-radius: inherit;
+            background-color: #000;
+        }
+
+        .app-display.active .weather-ui { opacity: 1; }
+        
+        .weather-ui iframe {
+            width: 100%; height: 100%; border: none;
+        }
 
     </style>
 </head>
 <body>
 
     <div class="phone-frame" id="phoneFrame">
-        <div class="camera-hole"></div>
+        <!-- DYNAMIC ISLAND (thay thế camera-hole cũ) -->
+        <div class="dynamic-island" id="dynamicIsland">
+            <div class="charge-content">
+                <span class="charge-text">Đang sạc</span>
+                <div class="charge-info">
+                <span class="battery-percent" id="batteryPercent">100%</span>
+                    <img class="charge-icon" src="https://img.icons8.com/?size=1600&id=mEvI7CsePwKA&format=png&color=000000" alt="charge icon">
+                </div>
+            </div>
+        </div>
 
-        <div class="status-bar">
+        <div class="status-bar" id="statusBar">
             <div class="time" id="clock">09:41</div>
             <div class="status-icons">
                 <span class="material-symbols-rounded">android_cell_4_bar</span>
@@ -485,6 +558,12 @@
                     </div>
                 </div>
             </div>
+
+            <!-- MÀN HÌNH GIAO DIỆN THỜI TIẾT (IFRAME) -->
+            <div class="weather-ui" id="weatherUI">
+                <iframe src="https://nnam0308.github.io/weather/" allowfullscreen></iframe>
+            </div>
+
         </div>
 
         <div class="nav-bar" id="navBar">
@@ -518,7 +597,8 @@
             { name: "Bản đồ", img: "https://static.wikia.nocookie.net/logopedia/images/8/8a/Maps_2025.png" },
             { name: "Sức khỏe", img: "https://static.wikia.nocookie.net/logopedia/images/6/6a/Apple_Health_2025.png" },
             { name: "Ví", img: "https://static.wikia.nocookie.net/logopedia/images/e/ed/Wallet_2025.png" },
-            { name: "Cài đặt", img: "https://static.wikia.nocookie.net/logopedia/images/a/ac/Settings_2025_II.png" }
+            { name: "Cài đặt", img: "https://static.wikia.nocookie.net/logopedia/images/a/ac/Settings_2025_II.png" },
+            { name: "Thời tiết", img: "https://static.wikia.nocookie.net/logopedia/images/3/38/Apple_Weather_2025.png" } // THÊM APP THỜI TIẾT
         ];
 
         const dockApps =[
@@ -554,23 +634,31 @@
         // --- LOGIC ANIMATION MỞ / ĐÓNG APP ---
         let isAppOpen = false;
         let activeElementSource = null;
-        
+        let activeAppContainer = null;
+        let originRect = {}; 
+                
         const appDisplay = document.getElementById('appDisplay');
         const phoneFrame = document.getElementById('phoneFrame');
         const navBar = document.getElementById('navBar');
-        
+
         const transitionIcon = document.getElementById('transitionIcon');
         const defaultAppText = document.getElementById('defaultAppText');
         const settingsUI = document.getElementById('settingsUI');
+        const weatherUI = document.getElementById('weatherUI');
 
         function openApp(element, isWidget = false) {
             if (isAppOpen) return;
+            
+            activeAppContainer = element;
             activeElementSource = isWidget ? element : element.querySelector('.app-icon');
             if (!activeElementSource) return;
 
+            activeAppContainer.style.transition = 'none';
+            activeAppContainer.style.transform = 'scale(1)';
+            activeAppContainer.offsetHeight; // Kích hoạt Repaint
+
             const appName = element.getAttribute('data-name') || "App";
 
-            // GÁN HÌNH ẢNH ICON VÀO KHUNG CHUYỂN CẢNH
             if (!isWidget) {
                 transitionIcon.src = activeElementSource.src;
                 transitionIcon.style.display = 'block';
@@ -578,12 +666,20 @@
                 transitionIcon.style.display = 'none'; 
             }
 
+            // ĐIỀU CHỈNH GIAO DIỆN THEO TÊN APP
             if (appName === "Cài đặt") {
                 settingsUI.style.display = "flex";
+                weatherUI.style.display = "none";
                 defaultAppText.style.display = "none";
                 appDisplay.style.backgroundColor = "#f2f2f7"; 
+            } else if (appName === "Thời tiết") {
+                settingsUI.style.display = "none";
+                weatherUI.style.display = "block";
+                defaultAppText.style.display = "none";
+                appDisplay.style.backgroundColor = "#000"; 
             } else {
                 settingsUI.style.display = "none";
+                weatherUI.style.display = "none";
                 defaultAppText.style.display = "block";
                 defaultAppText.innerText = appName;
                 appDisplay.style.backgroundColor = "white";
@@ -592,18 +688,27 @@
             const rect = activeElementSource.getBoundingClientRect();
             const frameRect = phoneFrame.getBoundingClientRect();
             
-            // Trừ đi độ dày của viền phoneFrame (clientTop, clientLeft)
             const top = rect.top - frameRect.top - phoneFrame.clientTop;
             const left = rect.left - frameRect.left - phoneFrame.clientLeft;
 
+            originRect = {
+                top: top,
+                left: left,
+                width: rect.width,
+                height: rect.height,
+                borderRadius: isWidget ? '3.5vh' : `${rect.width * 0.25}px`
+            };
+
             appDisplay.style.transition = 'none';
-            appDisplay.style.borderRadius = isWidget ? '3.5vh' : `${rect.width * 0.25}px`;
-            appDisplay.style.top = `${top}px`;
-            appDisplay.style.left = `${left}px`;
-            appDisplay.style.width = `${rect.width}px`;
-            appDisplay.style.height = `${rect.height}px`;
+            appDisplay.style.borderRadius = originRect.borderRadius;
+            appDisplay.style.top = `${originRect.top}px`;
+            appDisplay.style.left = `${originRect.left}px`;
+            appDisplay.style.width = `${originRect.width}px`;
+            appDisplay.style.height = `${originRect.height}px`;
             appDisplay.style.visibility = 'visible';
             appDisplay.style.opacity = '1';
+
+            activeAppContainer.style.opacity = '0';
 
             appDisplay.offsetHeight; // Kích hoạt Repaint
 
@@ -612,9 +717,7 @@
             appDisplay.style.left = '0px';
             appDisplay.style.width = '100%';
             appDisplay.style.height = '100%';
-            
-            // XỬ LÝ VIỀN GÓC: Không bo viền App
-            appDisplay.style.borderRadius = '3.5vh'; 
+            appDisplay.style.borderRadius = '5vh'; 
 
             appDisplay.classList.add('active');
             phoneFrame.classList.add('app-opened');
@@ -623,20 +726,15 @@
 
         function closeApp() {
             if (!isAppOpen || !activeElementSource) return;
-            const rect = activeElementSource.getBoundingClientRect();
-            const frameRect = phoneFrame.getBoundingClientRect();
-            
-            const top = rect.top - frameRect.top - phoneFrame.clientTop;
-            const left = rect.left - frameRect.left - phoneFrame.clientLeft;
             
             appDisplay.classList.remove('active');
             phoneFrame.classList.remove('app-opened');
 
-            appDisplay.style.top = `${top}px`;
-            appDisplay.style.left = `${left}px`;
-            appDisplay.style.width = `${rect.width}px`;
-            appDisplay.style.height = `${rect.height}px`;
-            appDisplay.style.borderRadius = activeElementSource.classList.contains('app-icon') ? `${rect.width * 0.25}px` : '3.5vh';
+            appDisplay.style.top = `${originRect.top}px`;
+            appDisplay.style.left = `${originRect.left}px`;
+            appDisplay.style.width = `${originRect.width}px`;
+            appDisplay.style.height = `${originRect.height}px`;
+            appDisplay.style.borderRadius = originRect.borderRadius;
 
             const currentSpeedStr = getComputedStyle(document.documentElement).getPropertyValue('--anim-speed').trim();
             const currentSpeedMs = parseFloat(currentSpeedStr) * 1000;
@@ -645,7 +743,15 @@
                 if (!isAppOpen) {
                     appDisplay.style.visibility = 'hidden';
                     appDisplay.style.opacity = '0';
+                    
                     settingsUI.style.display = "none";
+                    weatherUI.style.display = "none";
+
+                    if (activeAppContainer) {
+                        activeAppContainer.style.opacity = '1';
+                        activeAppContainer.style.transform = ''; 
+                        activeAppContainer.style.transition = ''; 
+                    }
                 }
             }, currentSpeedMs);
             
@@ -661,6 +767,79 @@
             if (startY && (startY - endY > 20)) closeApp();
         });
         navBar.addEventListener('click', closeApp);
+
+        // --- DYNAMIC ISLAND: HIỆU ỨNG SẠC PIN ---
+        const dynamicIsland = document.getElementById('dynamicIsland');
+        const statusBar = document.getElementById('statusBar');
+        const batteryPercentSpan = document.getElementById('batteryPercent');
+        let chargingTimeout = null;
+        let previousChargingState = false;
+
+        function updateBatteryUI(battery) {
+            const percent = Math.round(battery.level * 100);
+            batteryPercentSpan.textContent = percent + '%';
+        }
+
+        function showChargingAnimation() {
+            // Ẩn status bar, thêm class charging cho dynamic island
+            statusBar.classList.add('hidden');
+            dynamicIsland.classList.add('charging');
+        }
+
+        function hideChargingAnimation() {
+            statusBar.classList.remove('hidden');
+            dynamicIsland.classList.remove('charging');
+        }
+
+        function handleChargingChange(battery) {
+            const isCharging = battery.charging;
+            updateBatteryUI(battery);
+
+            // Chỉ xử lý khi trạng thái sạc thay đổi
+            if (isCharging && !previousChargingState) {
+                // Bắt đầu sạc: hiển thị dynamic island mở rộng
+                showChargingAnimation();
+                // Tự động ẩn sau 5 giây
+                if (chargingTimeout) clearTimeout(chargingTimeout);
+                chargingTimeout = setTimeout(() => {
+                    hideChargingAnimation();
+                    chargingTimeout = null;
+                }, 5000);
+            } else if (!isCharging && previousChargingState) {
+                // Ngừng sạc: ẩn ngay lập tức nếu chưa hết 5s
+                if (chargingTimeout) {
+                    clearTimeout(chargingTimeout);
+                    chargingTimeout = null;
+                }
+                hideChargingAnimation();
+            }
+            previousChargingState = isCharging;
+        }
+
+        // Khởi tạo Battery API nếu được hỗ trợ
+        if (navigator && typeof navigator.getBattery === 'function') {
+            navigator.getBattery().then(function(battery) {
+                // Cập nhật UI ban đầu
+                updateBatteryUI(battery);
+                previousChargingState = battery.charging;
+                if (battery.charging) {
+                    // Nếu đang sạc ngay từ đầu, hiển thị animation
+                    showChargingAnimation();
+                    chargingTimeout = setTimeout(() => {
+                        hideChargingAnimation();
+                        chargingTimeout = null;
+                    }, 5000);
+                }
+
+                // Lắng nghe sự kiện thay đổi
+                battery.addEventListener('chargingchange', () => handleChargingChange(battery));
+                battery.addEventListener('levelchange', () => updateBatteryUI(battery));
+            }).catch(function() {
+                console.log('Battery API không khả dụng.');
+            });
+        } else {
+            console.log('Trình duyệt không hỗ trợ Battery API.');
+        }
     </script>
 </body>
 </html>
