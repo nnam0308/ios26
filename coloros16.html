@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ColorOS 16 Demo</title>
-    
+
     <!-- Favicon -->
     <link rel="icon" href="https://i.ibb.co/V0y8WY2T/Color-OS-16.png" type="image/png">
-    
+
     <!-- Inter Font (fallback) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-    
+
     <!-- OPPO Sans (chính) -->
     <link href="https://fonts.cdnfonts.com/css/opposans" rel="stylesheet">
-    
+
     <!-- Material Symbols Rounded -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
@@ -459,7 +459,7 @@
         }
 
         .app-display.active .google-ui { opacity: 1; }
-        
+
         /* CHUNG CHO IFRAME BÊN TRONG CÁC APP */
         .app-display iframe {
             width: 100%;
@@ -522,41 +522,7 @@
                 <div class="widget-label">Google</div>
             </div>
 
-            <!-- Hàng 1 ứng dụng -->
-            <div class="app" onclick="openApp(this)" data-name="Trình quản lý điện thoại">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F12%2F66%2F693bdd3ecaa88_com.coloros.phonemanager.png&w=1500&h=1500" class="app-icon" alt="Trình quản lý điện thoại">
-                <div class="app-label">Trình quản lý điện thoại</div>
-            </div>
-            <div class="app" onclick="openApp(this)" data-name="Trợ lý trò chơi">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2020%2F08%2F30%2F5f43b16159f2d.png&w=1500&h=1500" class="app-icon" alt="Trợ lý trò chơi">
-                <div class="app-label">Trợ lý trò chơi</div>
-            </div>
-            <div class="app" onclick="openApp(this)" data-name="App Market">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2024%2F04%2F16%2F662a72ac2e304_com.heytap.market.png&w=1500&h=1500" class="app-icon" alt="App Market">
-                <div class="app-label">App Market</div>
-            </div>
-            <div class="app" onclick="openApp(this)" data-name="Internet">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F09%2F22%2F68c0111ba8808_com.heytap.browser.png&w=1500&h=1500" class="app-icon" alt="Internet">
-                <div class="app-label">Internet</div>
-            </div>
-
-            <!-- Hàng 2 ứng dụng -->
-            <div class="app" onclick="openApp(this)" data-name="Video">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F09%2F49%2F68d51e50795aa_com.coloros.video.png&w=1500&h=1500" class="app-icon" alt="Video">
-                <div class="app-label">Video</div>
-            </div>
-            <div class="app" onclick="openApp(this)" data-name="Ảnh">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F11%2F41%2F690df1ca4359d_com.coloros.gallery3d.png&w=1500&h=1500" class="app-icon" alt="Ảnh">
-                <div class="app-label">Ảnh</div>
-            </div>
-            <div class="app" onclick="openApp(this)" data-name="Cửa hàng Play">
-                <img src="https://static.vecteezy.com/system/resources/previews/022/484/501/non_2x/google-play-store-icon-logo-symbol-free-png.png" class="app-icon" alt="Cửa hàng Play">
-                <div class="app-label">Cửa hàng Play</div>
-            </div>
-            <div class="app" onclick="openApp(this)" data-name="Google">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F05%2F44%2F68275a105b294_com.google.android.googlequicksearchbox.png&w=1500&h=1500" class="app-icon" alt="Google">
-                <div class="app-label">Google</div>
-            </div>
+            <!-- Các ứng dụng chính sẽ được render động -->
         </div>
 
         <!-- Nút Tìm kiếm (trên thanh dock) -->
@@ -567,20 +533,8 @@
             </div>
         </div>
 
-        <!-- Dock -->
+        <!-- Dock sẽ được render động -->
         <div class="dock" id="dock">
-            <div class="app" onclick="openApp(this)" data-name="Điện thoại">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2023%2F01%2F06%2F63c99d4fd8bfd.png&w=1500&h=1500" class="app-icon" alt="Điện thoại">
-            </div>
-            <div class="app" onclick="openApp(this)" data-name="Tin nhắn">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2023%2F02%2F84%2F63ebe729f02ff.png&w=1500&h=1500" class="app-icon" alt="Tin nhắn">
-            </div>
-            <div class="app" onclick="openApp(this)" data-name="Chrome">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2024%2F01%2F11%2F65a71d34ecd19_com.android.chrome.png&w=1500&h=1500" class="app-icon" alt="Chrome">
-            </div>
-            <div class="app" onclick="openApp(this)" data-name="Máy ảnh">
-                <img src="https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2020%2F08%2F23%2F5f2f40e5878f7.png&w=1500&h=1500" class="app-icon" alt="Máy ảnh">
-            </div>
         </div>
 
         <div class="app-display" id="appDisplay">
@@ -642,6 +596,69 @@
     </div>
 
     <script>
+        // --- DỮ LIỆU ỨNG DỤNG ---
+        const homeApps = [
+            { name: "Trình quản lý điện thoại", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F12%2F66%2F693bdd3ecaa88_com.coloros.phonemanager.png&w=1500&h=1500" },
+            { name: "Trợ lý trò chơi", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2020%2F08%2F30%2F5f43b16159f2d.png&w=1500&h=1500" },
+            { name: "App Market", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2024%2F04%2F16%2F662a72ac2e304_com.heytap.market.png&w=1500&h=1500" },
+            { name: "Internet", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F09%2F22%2F68c0111ba8808_com.heytap.browser.png&w=1500&h=1500" },
+            { name: "Video", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F09%2F49%2F68d51e50795aa_com.coloros.video.png&w=1500&h=1500" },
+            { name: "Ảnh", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F11%2F41%2F690df1ca4359d_com.coloros.gallery3d.png&w=1500&h=1500" },
+            { name: "Cửa hàng Play", img: "https://static.vecteezy.com/system/resources/previews/022/484/501/non_2x/google-play-store-icon-logo-symbol-free-png.png" },
+            { name: "Google", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F05%2F44%2F68275a105b294_com.google.android.googlequicksearchbox.png&w=1500&h=1500" }
+        ];
+
+        const dockApps = [
+            { name: "Điện thoại", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2023%2F01%2F06%2F63c99d4fd8bfd.png&w=1500&h=1500" },
+            { name: "Tin nhắn", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2023%2F02%2F84%2F63ebe729f02ff.png&w=1500&h=1500" },
+            { name: "Chrome", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2024%2F01%2F11%2F65a71d34ecd19_com.android.chrome.png&w=1500&h=1500" },
+            { name: "Máy ảnh", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2020%2F08%2F23%2F5f2f40e5878f7.png&w=1500&h=1500" }
+        ];
+
+        // --- HÀM TẠO HTML CHO MỘT APP ---
+        function createAppElement(appData) {
+            const appDiv = document.createElement('div');
+            appDiv.className = 'app';
+            appDiv.setAttribute('onclick', 'openApp(this)');
+            appDiv.setAttribute('data-name', appData.name);
+
+            const img = document.createElement('img');
+            img.src = appData.img;
+            img.className = 'app-icon';
+            img.alt = appData.name;
+
+            const label = document.createElement('div');
+            label.className = 'app-label';
+            label.textContent = appData.name;
+
+            appDiv.appendChild(img);
+            appDiv.appendChild(label);
+
+            return appDiv;
+        }
+
+        // --- RENDER ỨNG DỤNG VÀO MÀN HÌNH CHÍNH ---
+        function renderHomeApps() {
+            const homeScreen = document.getElementById('home-screen');
+            homeApps.forEach(app => {
+                homeScreen.appendChild(createAppElement(app));
+            });
+        }
+
+        // --- RENDER ỨNG DỤNG VÀO DOCK ---
+        function renderDockApps() {
+            const dock = document.getElementById('dock');
+            dockApps.forEach(app => {
+                dock.appendChild(createAppElement(app));
+            });
+        }
+
+        // --- GỌI HÀM RENDER KHI TRANG ĐÃ TẢI ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHomeApps();
+            renderDockApps();
+        });
+
         // --- CẬP NHẬT ĐỒNG HỒ TRÊN THANH TRẠNG THÁI ---
         function updateStatusBarClock() {
             const now = new Date();
