@@ -3,36 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ColorOS 16 Demo</title>
-
-    <!-- Favicon -->
-    <link rel="icon" href="https://i.ibb.co/V0y8WY2T/Color-OS-16.png" type="image/png">
-
-    <!-- Inter Font (fallback) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-
-    <!-- OPPO Sans (chính) -->
+    <title>OS Demo (Android Style)</title>
+    <link rel="icon" href="https://static.wikia.nocookie.net/logopedia/images/8/84/IOS26.png" type="image/png">
     <link href="https://fonts.cdnfonts.com/css/opposans" rel="stylesheet">
-
-    <!-- Material Symbols Rounded -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <style>
         :root {
-            --anim-speed: 0.5s;
-            /* Màu chữ dựa trên nền tối (dark wallpaper) */
-            --label-color: #ffffff;
-            --widget-shadow: inset -2px -2px 1px -2px #b3b3b3, inset 2px 2px 1px -2px #b3b3b3, 0 2px 8px rgba(0, 0, 0, 0.1);
+            --anim-speed: 0.5s; 
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'OPPOSans', 'Inter', sans-serif;
+            font-family: 'OPPOSans', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
-
         body {
             background-color: #000;
             height: 100vh;
@@ -42,7 +28,6 @@
             align-items: center;
             overflow: hidden;
         }
-
         .phone-frame {
             height: 95vh;
             aspect-ratio: 9 / 19.5;
@@ -58,7 +43,6 @@
             flex-direction: column;
             transition: all 0.3s ease;
         }
-
         .dynamic-island {
             position: absolute;
             top: 2vh;
@@ -76,25 +60,11 @@
             justify-content: center;
             overflow: hidden;
         }
-
-        .charge-content {
-            display: none;
-            width: 100%;
-            height: 100%;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 1.5vh;
-            color: white;
-            font-size: 1.75vh;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
+        .charge-content { display: none; width: 100%; height: 100%; align-items: center; justify-content: space-between; padding: 0 1.5vh; color: white; font-size: 1.75vh; font-weight: 500; white-space: nowrap; }
         .charge-text { flex-shrink: 0; }
         .charge-info { display: flex; align-items: center; gap: 0.3vh; flex-shrink: 0; }
         .charge-icon { width: 3.5vh; height: 3.5vh; object-fit: contain; }
         .battery-percent { font-size: 1.75vh; font-weight: 500; }
-
         .dynamic-island.charging { width: 35vh; border-radius: 2vh; }
         .dynamic-island.charging .charge-content { display: flex; }
 
@@ -108,389 +78,117 @@
             z-index: 90;
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
+        .status-bar.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .status-bar .time { font-size: 2vh; font-weight: 500; }
+        .status-icons { display: flex; align-items: center; gap: 0.75vh; text-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        .material-symbols-rounded { font-size: 2.5vh !important; font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
 
-        .status-bar.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .status-bar .time {
-            font-size: 2vh;
-            font-weight: 500;
-            font-family: 'OPPOSans', 'Inter', sans-serif;
-        }
-
-        .status-icons {
-            display: flex;
-            align-items: center;
-            gap: 0.75vh;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
-
-        .material-symbols-rounded {
-            font-size: 2.5vh !important;
-            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-
-        .home-screen,
-        .search-button-container,
-        .dock {
+        .home-screen, .search-button-container, .dock {
             transition: filter calc(var(--anim-speed) * 0.8) cubic-bezier(0.32, 0.72, 0, 1),
                         transform calc(var(--anim-speed) * 0.8) cubic-bezier(0.32, 0.72, 0, 1);
             will-change: filter, transform;
         }
-
-        .home-screen {
-            flex: 1;
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            grid-auto-rows: max-content;
-            gap: 2vh;
-            padding: 1.5vh 2.5vh;
-            align-content: start;
-            width: 100%;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* WIDGET WRAPPER & LABEL */
-        .widget-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            gap: 0.6vh;
-        }
-
-        .widget {
-            width: 100%;
-            border-radius: 3vh;
-            box-shadow: var(--widget-shadow);
-            transition: transform 0.1s ease;
-            overflow: hidden;
-        }
-
-        .widget-label {
-            color: var(--label-color);
-            font-size: 1.4vh;
-            font-weight: 450;
-            text-align: center;
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-shadow: none;
-        }
-
-        /* Đồng hồ widget */
-        .clock-widget {
-            background: transparent;
-            color: white;
-            padding: 2vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-family: 'OPPOSans', 'Inter', sans-serif;
-        }
-
-        .clock-date { font-size: 2vh; font-weight: 400; opacity: 0.9; margin-bottom: 0.5vh; }
-        .clock-time { font-size: 10vh; font-weight: bold; line-height: 1; }
-
-        /* Google Search widget */
-        .google-search-widget {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 3vh;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.2vh 2vh;
-            box-shadow: var(--widget-shadow);
-            cursor: pointer;
-        }
-
-        .google-left { display: flex; align-items: center; }
-        .google-icon { width: 3.5vh; height: 3.5vh; object-fit: contain; }
-        .google-right { display: flex; align-items: center; gap: 2vh; }
-        .mic-icon, .lens-icon {
-            font-size: 2.8vh !important;
-            color: #5f6368;
-            transition: color 0.2s;
-        }
-        .mic-icon:active, .lens-icon:active { color: #1a73e8; }
-
-        /* APP ICONS & LABELS */
-        .app {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.1s cubic-bezier(0.2, 0, 0.2, 1);
-            width: 100%;
-        }
-
+        .home-screen { flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: max-content; gap: 2vh; padding: 1.5vh 2.5vh; align-content: start; width: 100%; position: relative; z-index: 10; }
+        .widget-wrapper { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        .clock-widget-wrapper { grid-column: span 4; grid-row: span 2; display: flex; align-items: center; justify-content: center; height: 100%; width: 100%; }
+        .clock-widget { aspect-ratio: auto !important; background: transparent; box-shadow: none; border-radius: 0; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; width: 100%; cursor: default; }
+        .clock-widget:active { transform: none; }
+        .clock-date { font-size: 1.8vh; font-weight: 400; text-shadow: 0 1px 4px rgba(0,0,0,0.6); }
+        .clock-time { font-size: 7.5vh; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,0.6); margin-top: -0.5vh; letter-spacing: 0.2vh;}
+        .search-widget-wrapper { grid-column: span 4; grid-row: span 1; width: 100%; margin-top: 0.5vh; margin-bottom: 2vh; }
+        .google-search-widget { aspect-ratio: auto !important; height: 6.5vh; background: rgba(255, 255, 255, 0.95); border-radius: 4vh; padding: 0 2.5vh; display: flex; flex-direction: row; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); width: 100%; cursor: pointer; transition: transform 0.1s ease; }
+        .google-search-widget:active { transform: scale(0.96); }
+        .g-search-left { display: flex; align-items: center; }
+        .g-search-left img { height: 2.8vh; object-fit: contain; }
+        .g-search-right { display: flex; gap: 2vh; color: #5f6368; }
+        .g-search-right .material-symbols-rounded { font-size: 3vh !important; }
+        .app { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.1s cubic-bezier(0.2, 0, 0.2, 1); width: 100%; }
         .app:active { transform: scale(0.85); }
-
-        .app-icon {
-            width: 90%;
-            aspect-ratio: 1;
-            border-radius: 25%;
-            object-fit: cover;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .app-label {
-            color: var(--label-color);
-            font-size: 1.4vh;
-            margin-top: 0.8vh;
-            font-weight: 450;
-            text-align: center;
-            width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* NÚT TÌM KIẾM */
-        .search-button-container {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-bottom: 1.2vh;
-            z-index: 10;
-        }
-
-        .search-button {
-            display: flex;
-            align-items: center;
-            gap: 0.5vh;
-            padding: 1vh 2vh;
-            background-color: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(7px);
-            -webkit-backdrop-filter: blur(7px);
-            border-radius: 2vh;
-            box-shadow: inset -2px -2px 1px -2px #b3b3b3, inset 2px 2px 1px -2px #b3b3b3, 0 2px 8px rgba(0, 0, 0, 0.1);
-            color: white;
-            cursor: pointer;
-            transition: transform 0.1s;
-        }
-
+        .app-icon { width: 90%; aspect-ratio: 1; border-radius: 25%; object-fit: cover; box-shadow: 0 4px 10px rgba(0,0,0,0.2) }
+        .app-label { color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.6); font-size: 1.4vh; margin-top: 0.8vh; font-weight: 450; text-align: center; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .folder-icon { background-color: rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 0.3vh; padding: 1vh; align-content: start; border: 1px solid rgba(255, 255, 255, 0.2); }
+        .folder-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: 25%; background-color: transparent; box-shadow: none; }
+        .search-button-container { display: flex; justify-content: center; width: 100%; margin-bottom: 1.2vh; z-index: 10; }
+        .search-button { color: white; display: flex; align-items: center; gap: 0.5vh; padding: 1vh 2vh; background-color: #ffffff26; backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); border-radius: 2vh; box-shadow: inset 0 1px 8px #ffffff14,inset 0 -5px 12.7px #ffffff0f,inset 0 -4px 16px #ffffff7a,inset 0 1px 2px #fff9,inset 0 -.5px 1px #fff6 }
         .search-button:active { transform: scale(0.95); }
         .search-button span { font-size: 1.4vh; font-weight: 500; }
         .search-button .material-symbols-rounded { font-size: 2vh !important; }
+        .dock { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2vh; padding: 1.5vh; margin: 0 1.5vh 0vh 1.5vh; border-radius: 4vh; position: relative; z-index: 10; }
+        .nav-bar { height: 3vh; display: flex; justify-content: center; align-items: center; padding-bottom: env(safe-area-inset-bottom, 1.2vh); position: relative; z-index: 90; cursor: pointer; }
+        .gesture-pill { width: 35%; height: 0.5vh; background-color: white; border-radius: 1vh; opacity: 0.9; box-shadow: 0 1px 3px rgba(0,0,0,0.4); transition: transform 0.2s; }
 
-        /* DOCK */
-        .dock {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 2vh;
-            padding: 1.5vh;
-            margin: 0 1.5vh 0.5vh 1.5vh;
-            border-radius: 3vh;
-            background-color: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(7px);
-            -webkit-backdrop-filter: blur(7px);
-            box-shadow: inset -2px -2px 1px -2px #b3b3b3, inset 2px 2px 1px -2px #b3b3b3, 0 2px 8px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 10;
-        }
-
-        .nav-bar {
-            height: 3vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding-bottom: env(safe-area-inset-bottom, 1.2vh);
-            position: relative;
-            z-index: 90;
-            cursor: pointer;
-        }
-
-        .gesture-pill {
-            width: 35%;
-            height: 0.5vh;
-            background-color: white;
-            border-radius: 1vh;
-            opacity: 0.9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-            transition: transform 0.2s;
-        }
-
-        /* APP DISPLAY ANIMATION */
-        .app-display {
-            position: absolute;
-            background-color: white;
-            z-index: 50;
-            visibility: hidden;
-            pointer-events: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            transition: all var(--anim-speed) cubic-bezier(0.32, 0.72, 0, 1);
-            transform-origin: center;
-        }
-
+        .app-display { position: absolute; background-color: white; z-index: 50; visibility: hidden; pointer-events: none; display: flex; justify-content: center; align-items: center; overflow: hidden; transition: all var(--anim-speed) cubic-bezier(0.32, 0.72, 0, 1); transform-origin: center; }
         .app-display.active { pointer-events: auto; }
-
-        .transition-icon {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: inherit;
-            z-index: 100;
-            opacity: 1;
-            transition: opacity calc(var(--anim-speed) * 0.6) ease;
-            pointer-events: none;
-        }
-
+        .transition-icon { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; z-index: 100; opacity: 1; transition: opacity calc(var(--anim-speed) * 0.6) ease; pointer-events: none; }
         .app-display.active .transition-icon { opacity: 0; }
-
-        .app-display-text {
-            color: black;
-            font-size: 3.5vh;
-            font-weight: 600;
-            opacity: 0;
-            transform: translateY(2vh);
-            transition: all calc(var(--anim-speed) * 0.8) cubic-bezier(0.32, 0.72, 0, 1);
-            transition-delay: calc(var(--anim-speed) * 0.2);
-            z-index: 2;
-        }
-
+        .app-display-text { color: black; font-size: 3.5vh; font-weight: 600; opacity: 0; transform: translateY(2vh); transition: all calc(var(--anim-speed) * 0.8) cubic-bezier(0.32, 0.72, 0, 1); transition-delay: calc(var(--anim-speed) * 0.2); z-index: 2; }
         .app-display.active .app-display-text { opacity: 1; transform: translateY(0); }
 
         .phone-frame.app-opened .status-bar { color: black; text-shadow: none; transition: color 0.3s; }
         .phone-frame.app-opened .status-icons { text-shadow: none; }
         .phone-frame.app-opened .gesture-pill { background-color: black; transition: background-color 0.3s; }
+        .phone-frame.app-opened .home-screen, .phone-frame.app-opened .search-button-container, .phone-frame.app-opened .dock { filter: blur(7px); transform: scale(0.97); }
 
-        .phone-frame.app-opened .home-screen,
-        .phone-frame.app-opened .search-button-container,
-        .phone-frame.app-opened .dock {
-            filter: blur(7px);
-            transform: scale(0.97);
-        }
-
-        /* GIAO DIỆN CÀI ĐẶT */
-        .settings-ui {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f2f2f7;
-            display: none;
-            flex-direction: column;
-            padding-top: calc(env(safe-area-inset-top, 2vh) + 4vh);
-            opacity: 0;
-            transition: opacity calc(var(--anim-speed) * 0.8) ease;
-            transition-delay: calc(var(--anim-speed) * 0.2);
-        }
-
+        /* Settings Styles */
+        .settings-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f2f2f7; display: none; opacity: 0; transition: opacity calc(var(--anim-speed) * 0.8) ease; transition-delay: calc(var(--anim-speed) * 0.2); overflow: hidden; border-radius: inherit; }
         .app-display.active .settings-ui { opacity: 1; }
-
-        .settings-title {
-            font-size: 4vh;
-            font-weight: 700;
-            margin: 1vh 2.5vh 2vh 2.5vh;
-            color: black;
-            letter-spacing: -0.5px;
-        }
-
-        .settings-group { background-color: white; border-radius: 1.5vh; margin: 0 2.5vh 2.5vh 2.5vh; overflow: hidden; }
-        .settings-item { display: flex; align-items: center; padding: 1.5vh; border-bottom: 1px solid #e5e5ea; }
-        .settings-item:last-child { border-bottom: none; }
-
-        .profile-avatar { width: 6vh; height: 6vh; background-color: #d1d1d6; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 1.5vh; color: white; }
-        .profile-avatar .material-symbols-rounded { font-size: 3.5vh !important; }
-        .profile-info { display: flex; flex-direction: column; }
-        .profile-title { font-size: 2vh; color: #007aff; font-weight: 500; margin-bottom: 0.2vh; }
+        .settings-view { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1); background-color: #f2f2f7; z-index: 1; padding-top: calc(env(safe-area-inset-top, 2vh) + 7vh); }
+        .settings-view.active { transform: translateX(0); z-index: 2; }
+        .settings-view.previous { transform: translateX(-30%); z-index: 1; }
+        .settings-scroll-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: 12vh; }
+        .settings-scroll-content::-webkit-scrollbar { width: 4px; height: 4px; background: transparent; }
+        .settings-scroll-content::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.25); border-radius: 4px; }
+        .settings-header { width: 100%; height: 5vh; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; margin-bottom: 1vh; }
+        .settings-back { position: absolute; left: 3vh; display: flex; align-items: center; justify-content: center; color: #000; cursor: pointer; width: 5vh; height: 5vh; border-radius: 50%; background-color: #ffffff26; box-shadow: inset -2px -2px 1px -2px #b3b3b3, inset 2px 2px 1px -2px #b3b3b3, 0 2px 8px rgba(0, 0, 0, 0.1); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); }
+        .settings-back .material-symbols-rounded { font-size: 3vh !important; margin-left: -0.5vh; }
+        .settings-header-title { font-size: 2vh; font-weight: 600; color: black; }
+        .settings-title { font-size: 3.8vh; font-weight: 700; margin: 0 2.5vh 1.5vh 2.5vh; color: black; letter-spacing: -0.5px; flex-shrink: 0; }
+        .settings-group { background: white; border-radius: 2.5vh; margin: 0 2.5vh 2.5vh 2.5vh; overflow: hidden; }
+        .settings-item { display: flex; align-items: center; padding: 1.5vh 1.5vh; cursor: pointer; position: relative; }
+        .settings-item:not(:last-child)::after { content: ''; position: absolute; bottom: 0; left: 6.5vh; right: 0; height: 1px; background-color: rgba(0,0,0,0.08); }
+        .settings-item:active { background-color: rgba(0,0,0,0.03); }
+        .profile-avatar { width: 7vh; height: 7vh; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-right: 1.5vh; overflow: hidden; flex-shrink: 0 }
+        .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-info { display: flex; flex-direction: column; justify-content: center; }
+        .profile-title { font-size: 2.1vh; color: black; font-weight: 400; margin-bottom: 0.2vh; }
         .profile-subtitle { font-size: 1.4vh; color: #8e8e93; font-weight: 400; }
-
-        .settings-icon { width: 3.5vh; height: 3.5vh; border-radius: 0.8vh; display: flex; justify-content: center; align-items: center; color: white; margin-right: 1.5vh; }
-        .settings-icon.anim-icon { background-color: #5856d6; }
+        .settings-icon { width: 4vh; height: 3vh; border-radius: 0.8vh; display: flex; justify-content: center; align-items: center; color: white; margin-right: 1.5vh; flex-shrink: 0; }
         .settings-icon .material-symbols-rounded { font-size: 2.2vh !important; }
-        .settings-content { flex: 1; display: flex; justify-content: space-between; align-items: center; font-size: 1.8vh; font-weight: 500; color: black; }
-        .settings-select { appearance: none; background: transparent; border: none; color: #8e8e93; font-size: 1.6vh; font-weight: 450; text-align: right; outline: none; cursor: pointer; direction: rtl; }
-
-        .settings-search-container { position: absolute; bottom: calc(env(safe-area-inset-bottom, 1.2vh) + 3.5vh); left: 0; width: 100%; padding: 0 2.5vh; display: flex; justify-content: center; }
-        .settings-search-bar { background-color: #e4e4e9; border-radius: 1.5vh; display: flex; align-items: center; width: 100%; padding: 1vh 1.5vh; gap: 1vh; color: #8e8e93; }
-        .settings-search-bar input { border: none; background: transparent; font-size: 1.7vh; width: 100%; outline: none; color: black; font-weight: 500; }
+        .settings-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .settings-content { flex: 1; display: flex; justify-content: space-between; align-items: center; font-size: 1.8vh; font-weight: 450; color: black; gap: 1vh; }
+        .settings-content-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; padding-right: 1vh; }
+        .settings-search-container { position: absolute; bottom: calc(env(safe-area-inset-bottom, 1.2vh) + 3.5vh); left: 0; width: 100%; padding: 0 2.5vh; display: flex; justify-content: center; z-index: 10; pointer-events: none; }
+        .settings-search-bar { background: #ffffff26; box-shadow: inset -2px -2px 1px -2px #b3b3b3, inset 2px 2px 1px -2px #b3b3b3, 0 2px 8px rgba(0, 0, 0, 0.1); border-radius: 5vh; padding: 1.5vh 1.5vh; display: flex; align-items: center; width: 100%; gap: 1vh; color: #8e8e93; backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); pointer-events: auto; }
+        .settings-search-bar input { border: none; background: transparent; font-size: 1.7vh; width: 100%; outline: none; color: black; font-weight: 400; }
         .settings-search-bar input::placeholder { color: #8e8e93; font-weight: 400; }
+        .toggle-switch { width: 7vh; height: 3vh; background: #e5e5ea; border-radius: 1.5vh; position: relative; cursor: pointer; transition: background 0.3s; flex-shrink: 0; }
+        .toggle-switch.active { background: #34c759; }
+        .toggle-switch::after { content: ''; position: absolute; top: 0.25vh; left: 0.25vh; width: 4vh; height: 2.5vh; background: white; border-radius: 50vh; transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1); box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .toggle-switch.active::after { transform: translateX(2.5vh); }
 
-        /* GIAO DIỆN THỜI TIẾT */
-        .weather-ui {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            opacity: 0;
-            transition: opacity calc(var(--anim-speed) * 0.8) ease;
-            transition-delay: calc(var(--anim-speed) * 0.2);
-            border-radius: inherit;
-            background-color: #000;
-        }
-
-        .app-display.active .weather-ui { opacity: 1; }
-
-        /* GIAO DIỆN GOOGLE */
-        .google-ui {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            opacity: 0;
-            transition: opacity calc(var(--anim-speed) * 0.8) ease;
-            transition-delay: calc(var(--anim-speed) * 0.2);
-            border-radius: inherit;
-            background-color: #fff;
-            padding-top: calc(env(safe-area-inset-top, 2vh) + 3.5vh);
-            box-sizing: border-box;
-        }
-
-        .app-display.active .google-ui { opacity: 1; }
-
-        /* CHUNG CHO IFRAME BÊN TRONG CÁC APP */
-        .app-display iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            border-radius: 0;
-        }
-
-        .app-display iframe::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-            background-color: transparent;
-        }
-
+        .folder-view { position: absolute; top: 0; left: 0; width: 100%; height: 100%; backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); border-radius: inherit; display: none; opacity: 0; transition: opacity calc(var(--anim-speed) * 0.8) ease; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
+        .folder-view.active { opacity: 1; }
+        .folder-label { color: white; font-size: 3vh; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.5); margin-bottom: 2vh; }
+        .folder-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2vh; padding: 2vh; width: 80%; background: #ffffff26; border-radius: 15%; backdrop-filter: blur(7px); }
+        .folder-item { display: flex; flex-direction: column; align-items: center; }
+        .folder-item .app-icon { width: 80%; aspect-ratio: 1; border-radius: 25%; object-fit: cover; }
+        .folder-item-label { color: white; font-size: 1.2vh; margin-top: 0.5vh; text-shadow: 0 1px 3px rgba(0,0,0,0.6); text-align: center; }
     </style>
 </head>
 <body>
-
     <div class="phone-frame" id="phoneFrame">
         <div class="dynamic-island" id="dynamicIsland">
             <div class="charge-content">
                 <span class="charge-text">Đang sạc</span>
                 <div class="charge-info">
                     <span class="battery-percent" id="batteryPercent">100%</span>
-                    <img class="charge-icon" src="https://img.icons8.com/?size=1600&id=mEvI7CsePwKA&format=png&color=000000" alt="charge icon">
+                    <img class="charge-icon" src="https://img.icons8.com/?size=1600&id=nF4XreW6csqG&format=png&color=34c759" alt="charge icon">
                 </div>
             </div>
         </div>
 
         <div class="status-bar" id="statusBar">
-            <div class="time" id="clock">09:41</div>
+            <div class="time" id="clock">08:47</div>
             <div class="status-icons">
                 <span class="material-symbols-rounded">android_cell_4_bar</span>
                 <span class="material-symbols-rounded">android_wifi_3_bar</span>
@@ -499,104 +197,171 @@
         </div>
 
         <div class="home-screen" id="home-screen">
-            <!-- Widget Đồng hồ (4x2) -->
-            <div class="widget-wrapper" style="grid-column: span 4; grid-row: span 2;">
-                <div class="widget clock-widget">
-                    <div class="clock-date" id="widgetDate">Thứ Ba, 1 tháng 1, 2025</div>
-                    <div class="clock-time" id="widgetTime">00:00</div>
+            <div class="widget-wrapper clock-widget-wrapper">
+                <div class="widget clock-widget" data-name="Đồng hồ">
+                    <div class="clock-date" id="clockDate">Thứ Sáu, 8 tháng 5, 2026</div>
+                    <div class="clock-time" id="clockTime">08:47</div>
                 </div>
-                <div class="widget-label">Đồng hồ</div>
             </div>
-
-            <!-- Widget Google Search (4x1) -->
-            <div class="widget-wrapper" style="grid-column: span 4; grid-row: span 1;">
-                <div class="widget google-search-widget" onclick="openApp(this, true)" data-name="Google">
-                    <div class="google-left">
-                        <img class="google-icon" src="https://static.wikia.nocookie.net/logopedia/images/b/b6/Google_icon-may25.svg/" alt="Google">
-                    </div>
-                    <div class="google-right">
-                        <span class="material-symbols-rounded mic-icon">mic</span>
-                        <span class="material-symbols-rounded lens-icon">image_search</span>
+            <div class="widget-wrapper search-widget-wrapper">
+                <div class="widget google-search-widget" onclick="openApp(this, true)" data-name="Google Search">
+                    <div class="g-search-left"><img src="https://static.wikia.nocookie.net/logopedia/images/b/b6/Google_icon-may25.svg" alt="Google"></div>
+                    <div class="g-search-right">
+                        <span class="material-symbols-rounded">mic</span>
+                        <span class="material-symbols-rounded">image_search</span>
                     </div>
                 </div>
-                <div class="widget-label">Google</div>
             </div>
-
-            <!-- Các ứng dụng chính sẽ được render động -->
         </div>
 
-        <!-- Nút Tìm kiếm (trên thanh dock) -->
         <div class="search-button-container">
-            <div class="search-button">
-                <span class="material-symbols-rounded">search</span>
-                <span>Tìm kiếm</span>
-            </div>
+            <div class="search-button"><span class="material-symbols-rounded">search</span><span>Tìm kiếm</span></div>
         </div>
 
-        <!-- Dock sẽ được render động -->
-        <div class="dock" id="dock">
-        </div>
+        <div class="dock" id="dock"></div>
 
         <div class="app-display" id="appDisplay">
             <img id="transitionIcon" class="transition-icon" src="" alt="">
             <div class="app-display-text" id="defaultAppText">Coming soon</div>
 
+            <!-- SETTINGS UI -->
             <div class="settings-ui" id="settingsUI">
-                <div class="settings-title">Cài đặt</div>
-                <div class="settings-group">
-                    <div class="settings-item">
-                        <div class="profile-avatar">
-                            <span class="material-symbols-rounded">person</span>
+
+                <!-- VIEW MAIN -->
+                <div class="settings-view active" id="view-main">
+                    <div class="settings-title">Cài đặt</div>
+                    <div class="settings-scroll-content">
+                        <div class="settings-group">
+                            <div class="settings-item">
+                                <div class="profile-avatar"><img src="https://support.apple.com/content/dam/edam/applecare/images/en_US/psp/psp_heroes/mini-hero-apple-id.png" alt="Apple ID"></div>
+                                <div class="profile-info"><div class="profile-title">Đăng nhập vào điện thoại</div><div class="profile-subtitle">Thiết lập iCloud, App Store...</div></div>
+                            </div>
                         </div>
-                        <div class="profile-info">
-                            <div class="profile-title">Đăng nhập vào điện thoại</div>
-                            <div class="profile-subtitle">Thiết lập iCloud, App Store...</div>
+
+                        <!-- Group 1 -->
+                        <div class="settings-group">
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=89305&format=png&color=ff8c28" alt="Chế độ máy bay"></div><div class="settings-content"><span class="settings-content-text">Chế độ máy bay</span><div class="toggle-switch" onclick="event.stopPropagation(); this.classList.toggle('active')"></div></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=85509&format=png&color=0088ff" alt="Wi-Fi"></div><div class="settings-content"><span class="settings-content-text">Wi-Fi</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=97830&format=png&color=0088ff" alt="Bluetooth"></div><div class="settings-content"><span class="settings-content-text">Bluetooth</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=97937&format=png&color=34c759" alt="Dữ liệu di động"></div><div class="settings-content"><span class="settings-content-text">Dữ liệu di động</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=103538&format=png&color=0088ff" alt="Thiết bị kết nối"></div><div class="settings-content"><span class="settings-content-text">Thiết bị kết nối</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                        </div>
+
+                        <!-- Group 2 -->
+                        <div class="settings-group">
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=86317&format=png&color=ff8c28" alt="Màn hình chính, Màn hình khóa & kiểu"></div><div class="settings-content"><span class="settings-content-text">Màn hình chính, Màn hình khóa & kiểu</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item" onclick="openSettingsView('view-display')"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=83221&format=png&color=ffcc00" alt="Màn hình & Độ sáng"></div><div class="settings-content"><span class="settings-content-text">Màn hình & Độ sáng</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                        </div>
+
+                        <!-- Group 3 -->
+                        <div class="settings-group">
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=86560&format=png&color=34c759" alt="Âm thanh & Rung"></div><div class="settings-content"><span class="settings-content-text">Âm thanh & Rung</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=94782&format=png&color=0088ff" alt="Thông báo & Cài đặt nhanh"></div><div class="settings-content"><span class="settings-content-text">Thông báo & Cài đặt nhanh</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                        </div>
+
+                        <!-- Group 4 -->
+                        <div class="settings-group">
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=83198&format=png&color=0088ff" alt="Bảo mật & Quyền riêng tư"></div><div class="settings-content"><span class="settings-content-text">Bảo mật & Quyền riêng tư</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=bgoXIG4W8dY9&format=png&color=ff3838" alt="An toàn & Khẩn cấp"></div><div class="settings-content"><span class="settings-content-text">An toàn & Khẩn cấp</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=85149&format=png&color=ffcc00" alt="Vị trí"></div><div class="settings-content"><span class="settings-content-text">Vị trí</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                        </div>
+
+                        <!-- Group 5 -->
+                        <div class="settings-group">
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=100&id=bs6388XY3hry&format=png&color=34c759" alt="Ứng dụng"></div><div class="settings-content"><span class="settings-content-text">Ứng dụng</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=100&id=96231&format=png&color=34c759" alt="Pin"></div><div class="settings-content"><span class="settings-content-text">Pin</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=100&id=85195&format=png&color=ff8c28" alt="Trợ năng"></div><div class="settings-content"><span class="settings-content-text">Trợ năng</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                        </div>
+
+                        <!-- Group 6 -->
+                        <div class="settings-group">
+                            <div class="settings-item"><div class="settings-icon"><img src="https://brandlogos.net/wp-content/uploads/2025/02/apple_intelligence-logo_brandlogos.net_zmypw.png" alt="OPPO AI"></div><div class="settings-content"><span class="settings-content-text">OPPO AI</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                        </div>
+
+                        <!-- Group 7 -->
+                        <div class="settings-group">
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=83214&format=png&color=c7c7cc" alt="Hệ thống & cập nhật"></div><div class="settings-content"><span class="settings-content-text">Hệ thống & cập nhật</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=87212&format=png&color=34c759" alt="Giới thiệu điện thoại"></div><div class="settings-content"><span class="settings-content-text">Giới thiệu điện thoại</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=83190&format=png&color=0088ff" alt="Người dùng & Tài khoản"></div><div class="settings-content"><span class="settings-content-text">Người dùng & Tài khoản</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=85795&format=png&color=0088ff" alt="Google"></div><div class="settings-content"><span class="settings-content-text">Google</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                            <div class="settings-item"><div class="settings-icon"><img src="https://img.icons8.com/?size=1600&id=84097&format=png&color=ff8c28" alt="Trợ giúp & Phản hồi"></div><div class="settings-content"><span class="settings-content-text">Trợ giúp & Phản hồi</span><span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span></div></div>
+                        </div>
+                    </div>
+                    <div class="settings-search-container">
+                        <div class="settings-search-bar">
+                            <span class="material-symbols-rounded" style="font-size:2.2vh!important">search</span>
+                            <input type="text" placeholder="Tìm kiếm">
                         </div>
                     </div>
                 </div>
-                <div class="settings-group">
-                    <div class="settings-item">
-                        <div class="settings-icon anim-icon">
-                            <span class="material-symbols-rounded">animation</span>
+
+                <!-- VIEW DISPLAY -->
+                <div class="settings-view" id="view-display">
+                    <div class="settings-header">
+                        <div class="settings-back" onclick="closeSettingsView()">
+                            <span class="material-symbols-rounded">arrow_back_ios_new</span>
                         </div>
-                        <div class="settings-content">
-                            <span>Tốc độ chuyển động</span>
-                            <select id="animSpeedSelect" class="settings-select">
-                                <option value="0.25">0.5x (Nhanh nhất)</option>
-                                <option value="0.5" selected>1x (Chuẩn)</option>
-                                <option value="0.75">1.5x</option>
-                                <option value="1">2x</option>
-                                <option value="2.5">5x</option>
-                                <option value="5">10x (Chậm nhất)</option>
-                            </select>
+                        <div class="settings-header-title">Màn hình & Độ sáng</div>
+                    </div>
+                    <div class="settings-scroll-content">
+                        <div class="settings-group" style="margin-top:1vh;">
+                            <div class="settings-item" onclick="openSettingsView('view-animspeed')">
+                                <div class="settings-content">
+                                    <span class="settings-content-text">Tốc độ chuyển động</span>
+                                    <span style="display:flex;align-items:center;gap:0.5vh;color:#8e8e93;flex-shrink:0;">
+                                        <span id="currentSpeedText">1x (Chuẩn)</span>
+                                        <span class="material-symbols-rounded" style="color:#c7c7cc;font-size:1.8vh!important">chevron_right</span>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="settings-search-container">
-                    <div class="settings-search-bar">
-                        <span class="material-symbols-rounded">search</span>
-                        <input type="text" placeholder="Tìm kiếm cài đặt...">
+
+                <!-- VIEW ANIM SPEED -->
+                <div class="settings-view" id="view-animspeed">
+                    <div class="settings-header">
+                        <div class="settings-back" onclick="closeSettingsView()">
+                            <span class="material-symbols-rounded">arrow_back_ios_new</span>
+                        </div>
+                        <div class="settings-header-title">Tốc độ chuyển động</div>
+                    </div>
+                    <div class="settings-scroll-content">
+                        <div class="settings-group" style="margin-top:1vh;">
+                            <div class="settings-item" onclick="setAnimSpeed('0.25', '0.5x (Nhanh nhất)', this)"><div class="settings-content"><span class="settings-content-text">0.5x (Nhanh nhất)</span><span class="material-symbols-rounded check-icon" style="color:#007aff;display:none;">check</span></div></div>
+                            <div class="settings-item" onclick="setAnimSpeed('0.5', '1x (Chuẩn)', this)"><div class="settings-content"><span class="settings-content-text">1x (Chuẩn)</span><span class="material-symbols-rounded check-icon" style="color:#007aff;display:block;">check</span></div></div>
+                            <div class="settings-item" onclick="setAnimSpeed('0.75', '1.5x', this)"><div class="settings-content"><span class="settings-content-text">1.5x</span><span class="material-symbols-rounded check-icon" style="color:#007aff;display:none;">check</span></div></div>
+                            <div class="settings-item" onclick="setAnimSpeed('1', '2x', this)"><div class="settings-content"><span class="settings-content-text">2x</span><span class="material-symbols-rounded check-icon" style="color:#007aff;display:none;">check</span></div></div>
+                            <div class="settings-item" onclick="setAnimSpeed('2.5', '5x', this)"><div class="settings-content"><span class="settings-content-text">5x</span><span class="material-symbols-rounded check-icon" style="color:#007aff;display:none;">check</span></div></div>
+                            <div class="settings-item" onclick="setAnimSpeed('5', '10x (Chậm nhất)', this)"><div class="settings-content"><span class="settings-content-text">10x (Chậm nhất)</span><span class="material-symbols-rounded check-icon" style="color:#007aff;display:none;">check</span></div></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="weather-ui" id="weatherUI">
-                <iframe src="https://nnam0308.github.io/weather/" allowfullscreen></iframe>
-            </div>
-
-            <!-- Giao diện Google -->
-            <div class="google-ui" id="googleUI">
-                <iframe src="https://www.google.com/?igu=1" allowfullscreen></iframe>
+            <!-- FOLDER VIEW -->
+            <div class="folder-view" id="folderView">
+                <div class="folder-label" id="folderLabel">Google</div>
+                <div class="folder-grid" id="folderGrid"></div>
             </div>
         </div>
 
-        <div class="nav-bar" id="navBar">
-            <div class="gesture-pill"></div>
-        </div>
+        <div class="nav-bar" id="navBar"><div class="gesture-pill"></div></div>
     </div>
 
     <script>
-        // --- DỮ LIỆU ỨNG DỤNG ---
+        // Clock
+        function updateClockWidget() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
+            const days =["Chủ nhật","Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy"];
+            document.getElementById('clockDate').innerText = `${days[now.getDay()]}, ${now.getDate()} tháng ${now.getMonth()+1}, ${now.getFullYear()}`;
+            document.getElementById('clockTime').innerText = now.getHours().toString().padStart(2,'0')+":"+now.getMinutes().toString().padStart(2,'0');
+        }
+        setInterval(updateClockWidget,1000);
+        updateClockWidget();
+
+        // Apps Data
         const homeApps = [
             { name: "Trình quản lý điện thoại", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F12%2F66%2F693bdd3ecaa88_com.coloros.phonemanager.png&w=1500&h=1500" },
             { name: "Trợ lý trò chơi", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2020%2F08%2F30%2F5f43b16159f2d.png&w=1500&h=1500" },
@@ -605,9 +370,17 @@
             { name: "Video", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F09%2F49%2F68d51e50795aa_com.coloros.video.png&w=1500&h=1500" },
             { name: "Ảnh", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F11%2F41%2F690df1ca4359d_com.coloros.gallery3d.png&w=1500&h=1500" },
             { name: "Cửa hàng Play", img: "https://static.vecteezy.com/system/resources/previews/022/484/501/non_2x/google-play-store-icon-logo-symbol-free-png.png" },
-            { name: "Google", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F05%2F44%2F68275a105b294_com.google.android.googlequicksearchbox.png&w=1500&h=1500" }
+            { name: "Cài đặt", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F12%2F73%2F69503ca8778c5_com.oplus.wirelesssettings.png&w=1500&h=1500" },
+            { name: "Google", isGroup: true, groupImgs: [
+                { img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F05%2F44%2F68275a105b294_com.google.android.googlequicksearchbox.png&w=1500&h=1500", name: "Google" },
+                { img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2020%2F10%2F91%2F5f9b61e42640e.png&w=1500&h=1500", name: "Gmail" },
+                { img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2026%2F03%2F90%2F69a89c189a402_com.google.android.apps.maps.png&w=1500&h=1500", name: "Maps" },
+                { img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2020%2F10%2F88%2F5fa353558a295.png&w=1500&h=1500", name: "Drive" },
+                { img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2025%2F12%2F31%2F692e5b530f68c_com.google.android.apps.photos.png&w=1500&h=1500", name: "Photos" },
+                { img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2024%2F10%2F21%2F67189d60d72a1_com.google.android.youtube.png&w=1500&h=1500", name: "YouTube" },
+                { img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2024%2F10%2F11%2F6716c79e6f715_com.google.android.apps.youtube.music.png&w=1500&h=1500", name: "YT Music" }
+            ]}
         ];
-
         const dockApps = [
             { name: "Điện thoại", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2023%2F01%2F06%2F63c99d4fd8bfd.png&w=1500&h=1500" },
             { name: "Tin nhắn", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2023%2F02%2F84%2F63ebe729f02ff.png&w=1500&h=1500" },
@@ -615,295 +388,137 @@
             { name: "Máy ảnh", img: "https://www.apkmirror.com/wp-content/themes/APKMirror/ap_resize/ap_resize.php?src=https%3A%2F%2Fdownloadr2.apkmirror.com%2Fwp-content%2Fuploads%2F2020%2F08%2F23%2F5f2f40e5878f7.png&w=1500&h=1500" }
         ];
 
-        // --- HÀM TẠO HTML CHO MỘT APP ---
-        function createAppElement(appData) {
-            const appDiv = document.createElement('div');
-            appDiv.className = 'app';
-            appDiv.setAttribute('onclick', 'openApp(this)');
-            appDiv.setAttribute('data-name', appData.name);
+        function renderApps(appData, containerId, hideLabel = false) {
+            const container = document.getElementById(containerId);
+            appData.forEach(app => {
+                if (app.isGroup) {
+                    let folderInner = '';
+                    app.groupImgs.forEach(item => folderInner += `<img src="${item.img}" alt="">`);
+                    container.innerHTML += `<div class="app folder-app" onclick="openApp(this)" data-name="${app.name}"><div class="folder-icon app-icon">${folderInner}</div>${hideLabel?'':`<div class="app-label">${app.name}</div>`}</div>`;
+                } else {
+                    container.innerHTML += `<div class="app" onclick="openApp(this)" data-name="${app.name}"><img src="${app.img}" class="app-icon" alt="${app.name}">${hideLabel?'':`<div class="app-label">${app.name}</div>`}</div>`;
+                }
+            });
+        }
+        renderApps(homeApps, 'home-screen');
+        renderApps(dockApps, 'dock', true);
 
-            const img = document.createElement('img');
-            img.src = appData.img;
-            img.className = 'app-icon';
-            img.alt = appData.name;
-
-            const label = document.createElement('div');
-            label.className = 'app-label';
-            label.textContent = appData.name;
-
-            appDiv.appendChild(img);
-            appDiv.appendChild(label);
-
-            return appDiv;
+        // Settings Navigation
+        let settingsNavStack = ['view-main'];
+        function openSettingsView(viewId) {
+            const current = document.getElementById(settingsNavStack[settingsNavStack.length-1]);
+            const next = document.getElementById(viewId);
+            if(next){
+                current.classList.remove('active'); current.classList.add('previous');
+                next.classList.add('active'); next.classList.remove('previous');
+                settingsNavStack.push(viewId);
+            }
+        }
+        function closeSettingsView() {
+            if(settingsNavStack.length<=1) return;
+            document.getElementById(settingsNavStack.pop()).classList.remove('active');
+            const prev = document.getElementById(settingsNavStack[settingsNavStack.length-1]);
+            prev.classList.add('active'); prev.classList.remove('previous');
+        }
+        function resetSettingsNav() {
+            settingsNavStack.forEach(id => document.getElementById(id).classList.remove('active','previous'));
+            settingsNavStack = ['view-main'];
+            document.getElementById('view-main').classList.add('active');
         }
 
-        // --- RENDER ỨNG DỤNG VÀO MÀN HÌNH CHÍNH ---
-        function renderHomeApps() {
-            const homeScreen = document.getElementById('home-screen');
-            homeApps.forEach(app => {
-                homeScreen.appendChild(createAppElement(app));
+        // Anim Speed
+        function setAnimSpeed(speed, text, element) {
+            document.documentElement.style.setProperty('--anim-speed', `${speed}s`);
+            document.getElementById('currentSpeedText').innerText = text;
+            element.parentElement.querySelectorAll('.check-icon').forEach(c => c.style.display = 'none');
+            element.querySelector('.check-icon').style.display = 'block';
+        }
+
+        // Folder
+        function renderFolderGrid(items) {
+            const grid = document.getElementById('folderGrid');
+            grid.innerHTML = '';
+            items.forEach(item => {
+                grid.innerHTML += `<div class="folder-item"><img src="${item.img}" class="app-icon" alt="${item.name}"><span class="folder-item-label">${item.name}</span></div>`;
             });
         }
 
-        // --- RENDER ỨNG DỤNG VÀO DOCK ---
-        function renderDockApps() {
-            const dock = document.getElementById('dock');
-            dockApps.forEach(app => {
-                dock.appendChild(createAppElement(app));
-            });
-        }
-
-        // --- GỌI HÀM RENDER KHI TRANG ĐÃ TẢI ---
-        document.addEventListener('DOMContentLoaded', () => {
-            renderHomeApps();
-            renderDockApps();
-        });
-
-        // --- CẬP NHẬT ĐỒNG HỒ TRÊN THANH TRẠNG THÁI ---
-        function updateStatusBarClock() {
-            const now = new Date();
-            document.getElementById('clock').innerText =
-                now.getHours().toString().padStart(2, '0') + ":" +
-                now.getMinutes().toString().padStart(2, '0');
-        }
-        setInterval(updateStatusBarClock, 1000);
-        updateStatusBarClock();
-
-        // --- CẬP NHẬT WIDGET ĐỒNG HỒ ---
-        function updateClockWidget() {
-            const now = new Date();
-            const days =['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
-            const months =['tháng 1', 'tháng 2', 'tháng 3', 'tháng 4', 'tháng 5', 'tháng 6', 'tháng 7', 'tháng 8', 'tháng 9', 'tháng 10', 'tháng 11', 'tháng 12'];
-            const dayName = days[now.getDay()];
-            const day = now.getDate();
-            const month = months[now.getMonth()];
-            const year = now.getFullYear();
-            document.getElementById('widgetDate').innerText = dayName + ', ' + day + ' ' + month + ', ' + year;
-
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            document.getElementById('widgetTime').innerText = hours + ':' + minutes;
-        }
-        setInterval(updateClockWidget, 1000);
-        updateClockWidget();
-
-        // --- XỬ LÝ ĐỔI TỐC ĐỘ ANIMATION ---
-        const animSpeedSelect = document.getElementById('animSpeedSelect');
-        animSpeedSelect.addEventListener('change', function() {
-            const newSpeed = this.value;
-            document.documentElement.style.setProperty('--anim-speed', `${newSpeed}s`);
-        });
-
-        // --- LOGIC ANIMATION MỞ / ĐÓNG APP ---
-        let isAppOpen = false;
-        let activeElementSource = null;
-        let activeAppContainer = null;
-        let originRect = {};
-
-        const appDisplay = document.getElementById('appDisplay');
-        const phoneFrame = document.getElementById('phoneFrame');
-        const navBar = document.getElementById('navBar');
-
-        const transitionIcon = document.getElementById('transitionIcon');
-        const defaultAppText = document.getElementById('defaultAppText');
-        const settingsUI = document.getElementById('settingsUI');
-        const weatherUI = document.getElementById('weatherUI');
-        const googleUI = document.getElementById('googleUI'); // BIẾN GOOGLE UI
+        // Open / Close App
+        let isAppOpen = false, activeElementSource = null, activeAppContainer = null, originRect = {};
+        const appDisplay = document.getElementById('appDisplay'), phoneFrame = document.getElementById('phoneFrame');
+        const transitionIcon = document.getElementById('transitionIcon'), defaultAppText = document.getElementById('defaultAppText');
+        const settingsUI = document.getElementById('settingsUI'), folderView = document.getElementById('folderView');
 
         function openApp(element, isWidget = false) {
             if (isAppOpen) return;
-
             activeAppContainer = element;
             activeElementSource = isWidget ? element : element.querySelector('.app-icon');
             if (!activeElementSource) return;
-
-            activeAppContainer.style.transition = 'none';
-            activeAppContainer.style.transform = 'scale(1)';
-            activeAppContainer.offsetHeight;
-
+            activeAppContainer.style.transition = 'none'; activeAppContainer.style.transform = 'scale(1)';
             const appName = element.getAttribute('data-name') || "App";
+            const appData = homeApps.find(a=>a.name===appName) || dockApps.find(a=>a.name===appName);
 
             if (!isWidget) {
-                transitionIcon.src = activeElementSource.src;
-                transitionIcon.style.display = 'block';
-            } else {
-                transitionIcon.style.display = 'none';
-            }
+                transitionIcon.style.display = activeElementSource.tagName==='IMG' ? 'block' : 'none';
+                if(activeElementSource.tagName==='IMG') transitionIcon.src = activeElementSource.src;
+            } else transitionIcon.style.display = 'none';
 
-            // KIỂM TRA TÊN APP ĐỂ MỞ ĐÚNG GIAO DIỆN
-            if (appName === "Cài đặt") {
-                settingsUI.style.display = "flex";
-                weatherUI.style.display = "none";
-                googleUI.style.display = "none";
-                defaultAppText.style.display = "none";
-                appDisplay.style.backgroundColor = "#f2f2f7";
-            } else if (appName === "Thời tiết") {
-                settingsUI.style.display = "none";
-                weatherUI.style.display = "block";
-                googleUI.style.display = "none";
-                defaultAppText.style.display = "none";
-                appDisplay.style.backgroundColor = "#000";
-            } else if (appName === "Google") {
-                settingsUI.style.display = "none";
-                weatherUI.style.display = "none";
-                googleUI.style.display = "block";
-                defaultAppText.style.display = "none";
-                appDisplay.style.backgroundColor = "#fff";
+            if (appName==="Cài đặt") {
+                settingsUI.style.display='block'; defaultAppText.style.display='none'; folderView.style.display='none'; appDisplay.style.backgroundColor='#f2f2f7';
+                resetSettingsNav();
+            } else if (appData?.isGroup) {
+                settingsUI.style.display='none'; defaultAppText.style.display='none'; folderView.style.display='flex'; folderView.classList.add('active'); appDisplay.style.backgroundColor='transparent';
+                document.getElementById('folderLabel').innerText = appData.name; renderFolderGrid(appData.groupImgs);
             } else {
-                settingsUI.style.display = "none";
-                weatherUI.style.display = "none";
-                googleUI.style.display = "none";
-                defaultAppText.style.display = "block";
-                defaultAppText.innerText = appName;
-                appDisplay.style.backgroundColor = "white";
+                settingsUI.style.display='none'; defaultAppText.style.display='block'; defaultAppText.innerText=appName; folderView.style.display='none'; appDisplay.style.backgroundColor='white';
             }
 
             const rect = activeElementSource.getBoundingClientRect();
             const frameRect = phoneFrame.getBoundingClientRect();
-
-            const top = rect.top - frameRect.top - phoneFrame.clientTop;
-            const left = rect.left - frameRect.left - phoneFrame.clientLeft;
-
-            originRect = {
-                top: top,
-                left: left,
-                width: rect.width,
-                height: rect.height,
-                borderRadius: isWidget ? '3.5vh' : `${rect.width * 0.25}px`
-            };
-
-            appDisplay.style.transition = 'none';
-            appDisplay.style.borderRadius = originRect.borderRadius;
-            appDisplay.style.top = `${originRect.top}px`;
-            appDisplay.style.left = `${originRect.left}px`;
-            appDisplay.style.width = `${originRect.width}px`;
-            appDisplay.style.height = `${originRect.height}px`;
-            appDisplay.style.visibility = 'visible';
-            appDisplay.style.opacity = '1';
-
-            activeAppContainer.style.opacity = '0';
-
-            appDisplay.offsetHeight;
-
-            appDisplay.style.transition = 'all var(--anim-speed) cubic-bezier(0.32, 0.72, 0, 1)';
-            appDisplay.style.top = '0px';
-            appDisplay.style.left = '0px';
-            appDisplay.style.width = '100%';
-            appDisplay.style.height = '100%';
-            appDisplay.style.borderRadius = '5vh';
-
-            appDisplay.classList.add('active');
-            phoneFrame.classList.add('app-opened');
-            isAppOpen = true;
+            originRect = { top: rect.top-frameRect.top, left: rect.left-frameRect.left, width: rect.width, height: rect.height, borderRadius: isWidget?'3.5vh':`${rect.width*0.25}px` };
+            appDisplay.style.transition='none'; Object.assign(appDisplay.style, { borderRadius: originRect.borderRadius, top: originRect.top+'px', left: originRect.left+'px', width: originRect.width+'px', height: originRect.height+'px', visibility:'visible', opacity:'1' });
+            activeAppContainer.style.opacity='0'; appDisplay.offsetHeight;
+            appDisplay.style.transition='all var(--anim-speed) cubic-bezier(0.32, 0.72, 0, 1)';
+            Object.assign(appDisplay.style, { top:'0', left:'0', width:'100%', height:'100%', borderRadius:'5vh' });
+            appDisplay.classList.add('active'); phoneFrame.classList.add('app-opened'); isAppOpen=true;
         }
 
         function closeApp() {
-            if (!isAppOpen || !activeElementSource) return;
-
-            appDisplay.classList.remove('active');
-            phoneFrame.classList.remove('app-opened');
-
-            appDisplay.style.top = `${originRect.top}px`;
-            appDisplay.style.left = `${originRect.left}px`;
-            appDisplay.style.width = `${originRect.width}px`;
-            appDisplay.style.height = `${originRect.height}px`;
-            appDisplay.style.borderRadius = originRect.borderRadius;
-
-            const currentSpeedStr = getComputedStyle(document.documentElement).getPropertyValue('--anim-speed').trim();
-            const currentSpeedMs = parseFloat(currentSpeedStr) * 1000;
-
-            setTimeout(() => {
-                if (!isAppOpen) {
-                    appDisplay.style.visibility = 'hidden';
-                    appDisplay.style.opacity = '0';
-
-                    settingsUI.style.display = "none";
-                    weatherUI.style.display = "none";
-                    googleUI.style.display = "none"; // Ẩn Google UI khi thoát
-
-                    if (activeAppContainer) {
-                        activeAppContainer.style.opacity = '1';
-                        activeAppContainer.style.transform = '';
-                        activeAppContainer.style.transition = '';
-                    }
+            if(!isAppOpen||!activeElementSource) return;
+            appDisplay.classList.remove('active'); phoneFrame.classList.remove('app-opened');
+            Object.assign(appDisplay.style, { top: originRect.top+'px', left: originRect.left+'px', width: originRect.width+'px', height: originRect.height+'px', borderRadius: originRect.borderRadius });
+            const speedMs = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--anim-speed'))*1000;
+            setTimeout(()=>{
+                if(!isAppOpen){
+                    appDisplay.style.visibility='hidden'; appDisplay.style.opacity='0';
+                    settingsUI.style.display='none'; folderView.style.display='none'; folderView.classList.remove('active');
+                    if(activeAppContainer){ activeAppContainer.style.opacity='1'; activeAppContainer.style.transform=''; activeAppContainer.style.transition=''; }
+                    resetSettingsNav();
                 }
-            }, currentSpeedMs);
-
-            isAppOpen = false;
+            }, speedMs);
+            isAppOpen=false;
         }
 
-        let startY = 0;
-        navBar.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; });
-        navBar.addEventListener('touchmove', (e) => { e.preventDefault(); }, { passive: false });
-        navBar.addEventListener('touchend', (e) => {
-            const endY = e.changedTouches[0].clientY;
-            if (startY && (startY - endY > 20)) closeApp();
-        });
-        navBar.addEventListener('click', closeApp);
+        document.getElementById('navBar').addEventListener('touchstart', e=>{ startY=e.touches[0].clientY; });
+        document.getElementById('navBar').addEventListener('touchmove', e=>e.preventDefault(), {passive:false});
+        document.getElementById('navBar').addEventListener('touchend', e=>{ if(startY&&(startY-e.changedTouches[0].clientY>20)) closeApp(); });
+        document.getElementById('navBar').addEventListener('click', closeApp);
 
-        // --- DYNAMIC ISLAND ---
-        const dynamicIsland = document.getElementById('dynamicIsland');
-        const statusBar = document.getElementById('statusBar');
-        const batteryPercentSpan = document.getElementById('batteryPercent');
-        let chargingTimeout = null;
-        let previousChargingState = false;
-
-        function updateBatteryUI(battery) {
-            const percent = Math.round(battery.level * 100);
-            batteryPercentSpan.textContent = percent + '%';
-        }
-
-        function showChargingAnimation() {
-            statusBar.classList.add('hidden');
-            dynamicIsland.classList.add('charging');
-        }
-
-        function hideChargingAnimation() {
-            statusBar.classList.remove('hidden');
-            dynamicIsland.classList.remove('charging');
-        }
-
-        function handleChargingChange(battery) {
-            const isCharging = battery.charging;
-            updateBatteryUI(battery);
-
-            if (isCharging && !previousChargingState) {
-                showChargingAnimation();
-                if (chargingTimeout) clearTimeout(chargingTimeout);
-                chargingTimeout = setTimeout(() => {
-                    hideChargingAnimation();
-                    chargingTimeout = null;
-                }, 5000);
-            } else if (!isCharging && previousChargingState) {
-                if (chargingTimeout) {
-                    clearTimeout(chargingTimeout);
-                    chargingTimeout = null;
-                }
-                hideChargingAnimation();
-            }
-            previousChargingState = isCharging;
-        }
-
-        if (navigator && typeof navigator.getBattery === 'function') {
-            navigator.getBattery().then(function(battery) {
-                updateBatteryUI(battery);
-                previousChargingState = battery.charging;
-                if (battery.charging) {
-                    showChargingAnimation();
-                    chargingTimeout = setTimeout(() => {
-                        hideChargingAnimation();
-                        chargingTimeout = null;
-                    }, 5000);
-                }
-
-                battery.addEventListener('chargingchange', () => handleChargingChange(battery));
-                battery.addEventListener('levelchange', () => updateBatteryUI(battery));
-            }).catch(function() {
-                console.log('Battery API không khả dụng.');
+        // Battery
+        const batteryPercentSpan = document.getElementById('batteryPercent'), dynamicIsland = document.getElementById('dynamicIsland'), statusBar = document.getElementById('statusBar');
+        let chargingTimeout, previousChargingState;
+        if(navigator.getBattery) navigator.getBattery().then(b=>{
+            batteryPercentSpan.textContent=Math.round(b.level*100)+'%';
+            previousChargingState=b.charging;
+            if(b.charging){ statusBar.classList.add('hidden'); dynamicIsland.classList.add('charging'); chargingTimeout=setTimeout(()=>{statusBar.classList.remove('hidden');dynamicIsland.classList.remove('charging');},5000); }
+            b.addEventListener('chargingchange', ()=>{
+                batteryPercentSpan.textContent=Math.round(b.level*100)+'%';
+                if(b.charging&&!previousChargingState){ statusBar.classList.add('hidden'); dynamicIsland.classList.add('charging'); clearTimeout(chargingTimeout); chargingTimeout=setTimeout(()=>{statusBar.classList.remove('hidden');dynamicIsland.classList.remove('charging');},5000); }
+                else if(!b.charging&&previousChargingState){ clearTimeout(chargingTimeout); statusBar.classList.remove('hidden'); dynamicIsland.classList.remove('charging'); }
+                previousChargingState=b.charging;
             });
-        } else {
-            console.log('Trình duyệt không hỗ trợ Battery API.');
-        }
+            b.addEventListener('levelchange', ()=> batteryPercentSpan.textContent=Math.round(b.level*100)+'%');
+        });
     </script>
 </body>
 </html>
